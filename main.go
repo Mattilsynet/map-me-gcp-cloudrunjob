@@ -94,6 +94,7 @@ func handleNewTargetLink(handler *CloudRunJobAdmin, link provider.InterfaceLinkD
 		handler.provider.Logger.Error("Missing config for target link", "link", link)
 		return nil
 	}
+	// INFO: Local development
 	if len(secret.CloudrunAdminServiceAccountJwt) == 0 {
 		// INFO: If you want to locally test component without secret manager, then uncoment underneath and comment return nil, add your cloud run admin and act as json inside the gcpadmin variable at the top of this file
 		// secret.CloudrunAdminServiceAccountJwt = []byte(gcpadmin)
