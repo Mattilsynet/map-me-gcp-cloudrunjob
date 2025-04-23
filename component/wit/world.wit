@@ -1,0 +1,7 @@
+package mattilsynet:me-gcp-component;
+
+world component {
+  include wasmcloud:component-go/imports@0.1.0;
+  import mattilsynet:me-gcp-cloudrun-job-admin/me-gcp-cloudrun-job-admin@0.1.0;
+  export wasmcloud:messaging/handler@0.2.0;
+}

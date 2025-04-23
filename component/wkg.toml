@@ -1,0 +1,2 @@
+[overrides]
+"mattilsynet:me-gcp-cloudrun-job-admin" = { path = "../wit" }

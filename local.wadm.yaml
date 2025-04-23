@@ -1,0 +1,68 @@
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: "map-me-gcp-cloudrunjob"
+  annotations:
+    description: "a wasmcloud application which exposes cloudrun admin by nats subjects"
+    version: v0.0.3
+spec:
+  policies:
+    - name: nats-kv
+      type: policy.secret.wasmcloud.dev/v1alpha1
+      properties:
+        backend: nats-kv
+  components:
+      - name: me-gcp-test-component
+        type: component
+        properties:
+          image: "file://./component/build/me-gcp-component_s.wasm"
+        traits:
+          - type: spreadscaler
+            properties:
+              instances: 1
+          - type: link
+            properties:
+              target:
+                name: map-me-gcp-cloudrunjob-provider
+                config:
+                  - name: map-me-gcp-cloudrunjob-provider-config
+                    properties:
+                      project_id: "map-ops-dev-c2c8" 
+                      image: "us-docker.pkg.dev/cloudrun/container/job:latest"
+                      location: "europe-north1"
+                secrets:
+                  - name: map-me-gcp-cloudrunjob-sa
+                    properties:
+                      policy: nats-kv 
+                      key: map-me-gcp-cloudrunjob-sa
+              namespace: mattilsynet
+              package: me-gcp-cloudrun-job-admin 
+              interfaces: [me-gcp-cloudrun-job-admin]
+      - name: nats-core
+        type: capability
+        properties:
+          image: ghcr.io/wasmcloud/messaging-nats:canary
+        traits:
+          - type: spreadscaler
+            properties:
+              instances: 1
+          - type: link
+            properties:
+              target: me-gcp-test-component
+              namespace: wasmcloud
+              package: messaging
+              interfaces: [handler]
+              source_config:
+                - name: me-gcp-test-component-subjects
+                  properties:
+                    cluster_uris: "nats://127.0.0.1"
+                    subscriptions: map.get, map.update, map.delete
+      - name: map-me-gcp-cloudrunjob-provider
+        type: capability
+        properties:
+          image: file://./build/map-me-gcp-cloudrunjob.par.gz
+        traits:
+          - type: spreadscaler
+            properties:
+              replicas: 1
+
