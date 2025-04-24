@@ -5,7 +5,6 @@ _wadm.yaml
 component/build/*
 component/wit/deps/*
 component/wasmcloud.lock
-component/gen/*
 map-me-gcp-cloudrunjob
 wit/deps/*
 wasmcloud.lock
