@@ -36,7 +36,7 @@ wkg (`cargo install wkg`)
 3. Uncomment and comment lines further down in `./main.go` under function `handleNewTargetLink` in section `INFO: Local development`  
 4. Modify `local.wadm.yaml` with your project and location for where your service account has access and you'd like to operate  
 5. `go mod tidy`  
-6. `wash build` in root  
+6. `wash build` in root (OBS, you might need to alternate between `go get` and `wash build` a two times locally) 
 7. `cd component`  
 8. `wash build`    
 9. Terminal 1: `wash up`   

@@ -1,7 +1,7 @@
 //go:build tools
-// +build tools
 
-package tools
+package main
 
-//go:generate go get -u ./...
-//go:generate go mod tidy
+import (
+	_ "github.com/bytecodealliance/wasm-tools-go/cmd/wit-bindgen-go"
+)

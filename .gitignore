@@ -7,7 +7,6 @@ component/wit/deps/*
 component/wasmcloud.lock
 component/gen/*
 map-me-gcp-cloudrunjob
-bindings/*
 wit/deps/*
 wasmcloud.lock
 go.sum
