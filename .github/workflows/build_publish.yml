@@ -78,6 +78,7 @@ jobs:
       - name: wash build test-component
         shell: bash
         run: |
+          go mod tidy
           wash build
         working-directory: component
       - name: test provider load
