@@ -8,5 +8,3 @@ component/wasmcloud.lock
 map-me-gcp-cloudrunjob
 wit/deps/*
 wasmcloud.lock
-go.sum
-
