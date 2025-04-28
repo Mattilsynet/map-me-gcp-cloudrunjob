@@ -1,6 +1,8 @@
 module github.com/Mattilsynet/map-me-gcp-cloudrunjob/component
 
-go 1.24.2
+go 1.24
+
+toolchain go1.24.2
 
 require (
 	github.com/Mattilsynet/mapis v0.0.5
