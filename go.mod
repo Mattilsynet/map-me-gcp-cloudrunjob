@@ -7,6 +7,7 @@ toolchain go1.24.2
 require (
 	cloud.google.com/go/run v1.9.3
 	github.com/Mattilsynet/mapis v0.0.5
+	github.com/bytecodealliance/wasm-tools-go v0.3.2
 	github.com/nats-io/nats.go v1.41.2
 	go.bytecodealliance.org v0.6.2
 	go.wasmcloud.dev/component v0.0.6
