@@ -7,7 +7,7 @@ import (
 	megcpcloudrunjobadmin "github.com/Mattilsynet/map-me-gcp-cloudrunjob/component/gen/mattilsynet/me-gcp-cloudrun-job-admin/me-gcp-cloudrun-job-admin"
 	managedenvironment "github.com/Mattilsynet/map-me-gcp-cloudrunjob/component/pkg/managed-environment"
 	"github.com/Mattilsynet/map-me-gcp-cloudrunjob/component/pkg/manifest"
-	"github.com/Mattilsynet/map-me-gcp-cloudrunjob/component/pkg/map-me-gcp-cloudrunjob"
+	idiomaticgo "github.com/Mattilsynet/map-me-gcp-cloudrunjob/component/pkg/map-me-gcp-cloudrunjob"
 	"github.com/Mattilsynet/map-me-gcp-cloudrunjob/component/pkg/nats"
 	"go.wasmcloud.dev/component/log/wasilog"
 )
@@ -46,19 +46,19 @@ func SubscriptionHandler(natsMsg *nats.Msg) {
 	var returnedManifest *megcpcloudrunjobadmin.ManagedEnvironmentGcpManifest = nil
 	switch natsMsg.Subject {
 	case GET:
-		returnedManifest, err = idiomatic_go_from_me_gcp_cloudrun_job_wit_provider.Get(manifest)
+		returnedManifest, err = idiomaticgo.Get(manifest)
 		if err != nil {
 			logger.Error("failed to convert data to managedGcpEnvironment", "error", err)
 			return
 		}
 	case UPDATE:
-		returnedManifest, err = idiomatic_go_from_me_gcp_cloudrun_job_wit_provider.Update(manifest)
+		returnedManifest, err = idiomaticgo.Update(manifest)
 		if err != nil {
 			logger.Error("failed to convert data to managedGcpEnvironment", "error", err)
 			return
 		}
 	case DELETE:
-		returnedManifest, err = idiomatic_go_from_me_gcp_cloudrun_job_wit_provider.Delete(manifest)
+		returnedManifest, err = idiomaticgo.Delete(manifest)
 		if err != nil {
 			logger.Error("failed to convert data to managedGcpEnvironment", "error", err)
 			return
