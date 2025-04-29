@@ -1,5 +1,5 @@
 [metadata]
-categories = ["cron"]
-description = "cronjob provider for wasmcloud components"
+categories = ["google cloud"]
+description = "map me cloudrunjob admin provider for wasmcloud components"
 license = "MIT"
 repository = "https://github.com/Mattilsynet/map-me-gcp-cloudrunjob"
