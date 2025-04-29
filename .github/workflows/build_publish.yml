@@ -36,10 +36,9 @@ jobs:
           chmod +x wit-bindgen-wrpc
           install -m 755 wit-bindgen-wrpc /usr/local/bin/
       
-      - name: download dependencies and generate go files
+      - name: download dependencies 
         shell: bash
         run: |
-          go generate ./...
           go mod tidy
       - name: validate-yaml
         shell: bash
