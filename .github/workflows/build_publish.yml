@@ -27,7 +27,7 @@ jobs:
       - name: install wash tools
         uses: taiki-e/install-action@v2
         with:
-          tool: wasm-tools@1.221.0, wash-cli
+          tool: wasm-tools@1.225.0, wash-cli
       - name: install wit-bindgen-wrpc
         shell: bash
         run: |
@@ -100,7 +100,6 @@ jobs:
           auth = { username = "${WASH_REG_USER}", password = "${WASH_REG_PASSWORD}"}
           EOF
           echo "WASH_PACKAGE_CONFIG_FILE=$(realpath package_config.toml)" >> $GITHUB_ENV
-
       - name: publish package to github repository
         env:
           WASH_REG_USER: ${{ github.repository_owner }}
@@ -118,9 +117,6 @@ jobs:
         run: wash wit build
       - name: publish wit
         run: wash wit publish *.wasm
-        env:
-          WASH_REG_USER: ${{ github.repository_owner }}
-          WASH_REG_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
       - name: Create GitHub Release
         id: create_release
         uses: actions/create-release@v1

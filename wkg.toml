@@ -1,5 +1,5 @@
 [metadata]
-categories = ["google cloud"]
+categories = ["googleCloud"]
 description = "map me cloudrunjob admin provider for wasmcloud components"
 license = "MIT"
 repository = "https://github.com/Mattilsynet/map-me-gcp-cloudrunjob"
