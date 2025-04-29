@@ -39,7 +39,6 @@ jobs:
       - name: download dependencies and generate go files
         shell: bash
         run: |
-          go get -u ./...
           go generate ./...
           go mod tidy
       - name: validate-yaml
