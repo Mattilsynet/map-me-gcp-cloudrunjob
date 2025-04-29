@@ -1,2 +1,2 @@
 [overrides]
-"mattilsynet:me-gcp-cloudrun-job-admin@0.1.0" = { path = "../wit" }
+"mattilsynet:me-gcp-cloudrun-job-admin" = { path = "../wit" }
