@@ -118,6 +118,9 @@ jobs:
         run: wash wit build
       - name: publish wit
         run: wash wit publish *.wasm
+        env:
+          WASH_REG_USER: ${{ github.repository_owner }}
+          WASH_REG_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
       - name: Create GitHub Release
         id: create_release
         uses: actions/create-release@v1
