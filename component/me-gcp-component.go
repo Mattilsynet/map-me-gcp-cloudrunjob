@@ -5,9 +5,9 @@ import (
 	"log/slog"
 
 	megcpcloudrunjobadmin "github.com/Mattilsynet/map-me-gcp-cloudrunjob/component/gen/mattilsynet/me-gcp-cloudrun-job-admin/me-gcp-cloudrun-job-admin"
+	idiomaticgo "github.com/Mattilsynet/map-me-gcp-cloudrunjob/component/pkg/cloudrunjob-admin-provider"
 	managedenvironment "github.com/Mattilsynet/map-me-gcp-cloudrunjob/component/pkg/managed-environment"
 	"github.com/Mattilsynet/map-me-gcp-cloudrunjob/component/pkg/manifest"
-	idiomaticgo "github.com/Mattilsynet/map-me-gcp-cloudrunjob/component/pkg/map-me-gcp-cloudrunjob"
 	"github.com/Mattilsynet/map-me-gcp-cloudrunjob/component/pkg/nats"
 	"go.wasmcloud.dev/component/log/wasilog"
 )
