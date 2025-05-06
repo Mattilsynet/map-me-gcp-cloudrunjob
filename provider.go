@@ -21,9 +21,10 @@ const (
 )
 
 type Config struct {
-	ProjectId string `json:"project_id"`
-	Location  string `json:"location"`
-	Image     string `json:"image"`
+	ProjectId                      string `json:"project_id"`
+	Location                       string `json:"location"`
+	Image                          string `json:"image"`
+	CloudrunAdminServiceAccountJwt string `json:"gcp_sa_jwt"`
 }
 type Secret struct {
 	CloudrunAdminServiceAccountJwt []byte `json:"gcp_sa_jwt"`

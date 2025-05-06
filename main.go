@@ -18,10 +18,6 @@ func main() {
 	}
 }
 
-// INFO: For local development purposes only, to buypass need to have whole secret manager up and running etc
-// Remember to delete your builds such that the par.gz file doesn't contain this jwt secret when pushing to git
-var gcpadmin = ``
-
 func run() error {
 	// Initialize the provider with callbacks to track linked components
 	providerHandler := NewCloudRunJobAdmin()
@@ -86,9 +82,10 @@ func handleNewTargetLink(handler *CloudRunJobAdmin, link provider.InterfaceLinkD
 		CloudrunAdminServiceAccountJwt: []byte(link.TargetSecrets["map-me-gcp-cloudrunjob-sa"].String.Reveal()),
 	}
 	config := Config{
-		ProjectId: link.TargetConfig["project_id"],
-		Location:  link.TargetConfig["location"],
-		Image:     link.TargetConfig["image"],
+		ProjectId:                      link.TargetConfig["project_id"],
+		Location:                       link.TargetConfig["location"],
+		Image:                          link.TargetConfig["image"],
+		CloudrunAdminServiceAccountJwt: link.TargetConfig["map-me-gcp-cloudrunjob-sa"],
 	}
 	if config.ProjectId == "" || config.Location == "" || config.Image == "" {
 		handler.provider.Logger.Error("Missing config for target link", "link", link)
@@ -99,7 +96,10 @@ func handleNewTargetLink(handler *CloudRunJobAdmin, link provider.InterfaceLinkD
 		// INFO: If you want to locally test component without secret manager, then uncoment underneath and comment return nil, add your cloud run admin and act as json inside the gcpadmin variable at the top of this file
 		// secret.CloudrunAdminServiceAccountJwt = []byte(gcpadmin)
 		// handler.provider.Logger.Info("using local development secret")
-		handler.provider.Logger.Error("No secret found for target link", "link", link)
+		secret.CloudrunAdminServiceAccountJwt = []byte(config.CloudrunAdminServiceAccountJwt)
+	}
+	if len(secret.CloudrunAdminServiceAccountJwt) == 0 {
+		handler.provider.Logger.Error("No secret service account jwt found for target link", "link", link)
 		return nil
 	}
 	handler.AddTarget(link.SourceID, &secret, &config)

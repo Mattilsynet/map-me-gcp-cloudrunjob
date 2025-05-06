@@ -13,6 +13,6 @@ func ToManagedEnvironment(meAsBytes []byte) (*me_gcp.ManagedGcpEnvironment, erro
 	return &me, nil
 }
 
-func ToNatsMsg(me *me_gcp.ManagedGcpEnvironment) ([]byte, error) {
+func ToBytes(me *me_gcp.ManagedGcpEnvironment) ([]byte, error) {
 	return me.MarshalVT()
 }
