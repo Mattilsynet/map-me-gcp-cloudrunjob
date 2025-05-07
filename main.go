@@ -97,6 +97,7 @@ func handleNewTargetLink(handler *CloudRunJobAdmin, link provider.InterfaceLinkD
 		// secret.CloudrunAdminServiceAccountJwt = []byte(gcpadmin)
 		// handler.provider.Logger.Info("using local development secret")
 		secret.CloudrunAdminServiceAccountJwt = []byte(config.CloudrunAdminServiceAccountJwt)
+		handler.provider.Logger.Info("using config instead of secret for cloud run admin jwt, NB! only use in development and not production")
 	}
 	if len(secret.CloudrunAdminServiceAccountJwt) == 0 {
 		handler.provider.Logger.Error("No secret service account jwt found for target link", "link", link)
