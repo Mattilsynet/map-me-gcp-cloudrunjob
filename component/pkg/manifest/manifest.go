@@ -26,3 +26,24 @@ func FromWitManifest(manifest *admin.ManagedEnvironmentGcpManifest) (*me_gcp.Man
 	}
 	return managedGcpEnvironment, nil
 }
+
+func IsChanged(meGcp *me_gcp.ManagedGcpEnvironment) bool {
+	if meGcp.Status == nil {
+		return true
+	}
+	if meGcp.Status.StatusMap == nil {
+		return true
+	}
+	return meGcp.Status.StatusMap["resource-version"] != meGcp.Metadata.ResourceVersion
+}
+
+func AddResourceVersion(meGcp *me_gcp.ManagedGcpEnvironment) error {
+	if meGcp.Status == nil {
+		meGcp.Status = &me_gcp.ManagedGcpEnvironmentStatus{}
+	}
+	if meGcp.Status.StatusMap == nil {
+		meGcp.Status.StatusMap = make(map[string]string)
+	}
+	meGcp.Status.StatusMap["resource-version"] = meGcp.Metadata.ResourceVersion
+	return nil
+}
