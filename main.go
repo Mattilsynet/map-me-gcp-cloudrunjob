@@ -3,6 +3,7 @@
 package main
 
 import (
+	"encoding/base64"
 	"log"
 	"os"
 	"os/signal"
@@ -78,8 +79,13 @@ func run() error {
 // TODO: add validation of link config and secret
 func handleNewTargetLink(handler *CloudRunJobAdmin, link provider.InterfaceLinkDefinition) error {
 	handler.provider.Logger.Info("Handling new target link", "link", link)
+	b64encodedSecretValue := link.TargetSecrets["map-me-gcp-cloudrunjob-sa"].String.Reveal()
+	cloudrunAdminSvcSaDecoded, err := base64.StdEncoding.DecodeString(b64encodedSecretValue)
+	if err != nil {
+		return err
+	}
 	secret := Secret{
-		CloudrunAdminServiceAccountJwt: []byte(link.TargetSecrets["map-me-gcp-cloudrunjob-sa"].String.Reveal()),
+		CloudrunAdminServiceAccountJwt: []byte(cloudrunAdminSvcSaDecoded),
 	}
 	config := Config{
 		ProjectId:                      link.TargetConfig["project_id"],
@@ -90,14 +96,6 @@ func handleNewTargetLink(handler *CloudRunJobAdmin, link provider.InterfaceLinkD
 	if config.ProjectId == "" || config.Location == "" || config.Image == "" {
 		handler.provider.Logger.Error("Missing config for target link", "link", link)
 		return nil
-	}
-	// INFO: Local development
-	if len(secret.CloudrunAdminServiceAccountJwt) == 0 {
-		// INFO: If you want to locally test component without secret manager, then uncoment underneath and comment return nil, add your cloud run admin and act as json inside the gcpadmin variable at the top of this file
-		// secret.CloudrunAdminServiceAccountJwt = []byte(gcpadmin)
-		// handler.provider.Logger.Info("using local development secret")
-		secret.CloudrunAdminServiceAccountJwt = []byte(config.CloudrunAdminServiceAccountJwt)
-		handler.provider.Logger.Info("using config instead of secret for cloud run admin jwt, NB! only use in development and not production")
 	}
 	if len(secret.CloudrunAdminServiceAccountJwt) == 0 {
 		handler.provider.Logger.Error("No secret service account jwt found for target link", "link", link)
