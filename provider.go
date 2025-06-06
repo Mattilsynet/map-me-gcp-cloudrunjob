@@ -65,6 +65,8 @@ func (cl *CloudRunJobAdmin) Shutdown() {
 	cl.secretMap = nil
 }
 
+// TODO:
+// add validation rules in query / command api towards protobuf incomming
 func CrjEnvsFrom(me *managedgcpenvironment.ManagedGcpEnvironment) []*runpb.EnvVar {
 	spec := me.Spec
 	envVars := []*runpb.EnvVar{
@@ -125,7 +127,7 @@ func (cl *CloudRunJobAdmin) Update(ctx__ context.Context, manifest *types.Manage
 	envVars := CrjEnvsFrom(&me)
 	// teams seed project
 	// TODO: move underneath to pkg
-	// Format: projects/{project}/locations/{location}/jobs/{jobId}, where {project}
+	// Format: projects/{project}/locations/{location}/jobs/{jobId}
 	jobId := "projects/" + gcpProjectToPutCrj + "/locations/" + config.Location + "/jobs/" + me.Metadata.Name
 	updateReq := runpb.UpdateJobRequest{
 		// INFO: AllowMissing will create the job if it doesn't exist
@@ -229,7 +231,7 @@ func (cl *CloudRunJobAdmin) Get(ctx__ context.Context, manifest *types.ManagedEn
 	getReq := runpb.GetJobRequest{
 		Name: jobId,
 	}
-	_, err = svc.GetJob(ctx__, &getReq)
+	job, err := svc.GetJob(ctx__, &getReq)
 	if err != nil {
 		updatedManifestbytes, innerErr := GetMeWithStatusAsBytes(&me, !HEALTHY)
 		if innerErr != nil {
@@ -244,7 +246,11 @@ func (cl *CloudRunJobAdmin) Get(ctx__ context.Context, manifest *types.ManagedEn
 		}
 		return &wrpc.Result[types.ManagedEnvironmentGcpManifest, types.Error]{Ok: manifest, Err: &unknownErr}, err
 	}
-	updatedManifestbytes, err := GetMeWithStatusAsBytes(&me, HEALTHY)
+	lastExecutionStatus := "NOT_RUN_YET"
+	if job != nil && job.LatestCreatedExecution != nil {
+		lastExecutionStatus = job.LatestCreatedExecution.CompletionStatus.String()
+	}
+	updatedManifestbytes, err := GetMeWithStatusAsBytes(&me, lastExecutionStatus)
 	if err != nil {
 		errExists := types.Error{Message: err.Error(), ErrorType: types.NewErrorTypeUnknown()}
 		return wrpc.Err[me_gcp_cloudrun_job_admin.ManagedEnvironmentGcpManifest](errExists), nil
@@ -265,10 +271,10 @@ func (cl *CloudRunJobAdmin) isLinkedWith(ctx context.Context) (bool, string) {
 	return true, target
 }
 
-func GetMeWithStatusAsBytes(managedEnvironment *managedgcpenvironment.ManagedGcpEnvironment, isHealthy bool) ([]byte, error) {
+func GetMeWithStatusAsBytes(managedEnvironment *managedgcpenvironment.ManagedGcpEnvironment, lastExecutionStatus string) ([]byte, error) {
 	managedEnvironment.Status = &managedgcpenvironment.ManagedGcpEnvironmentStatus{
 		StatusMap: map[string]string{
-			"Healthy": strconv.FormatBool(isHealthy),
+			"Status": lastExecutionStatus,
 		},
 	}
 	return managedEnvironment.MarshalVT()
