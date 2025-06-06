@@ -215,8 +215,9 @@ func (cl *CloudRunJobAdmin) Get(ctx__ context.Context, manifest *types.ManagedEn
 	me.UnmarshalVT(manifest.Bytes)
 	jwtOpt := option.WithCredentialsJSON(secret.CloudrunAdminServiceAccountJwt)
 	svc, err := r.NewJobsClient(ctx__, jwtOpt)
+	lastExecutionStatus := "UNKNOWN"
 	if err != nil {
-		updatedManifestbytes, innerErr := GetMeWithStatusAsBytes(&me, HEALTHY)
+		updatedManifestbytes, innerErr := GetMeWithStatusAsBytes(&me, lastExecutionStatus)
 		if innerErr != nil {
 			errUnknown := types.Error{Message: err.Error(), ErrorType: types.NewErrorTypeUnknown()}
 			return &wrpc.Result[me_gcp_cloudrun_job_admin.ManagedEnvironmentGcpManifest, types.Error]{Ok: manifest, Err: &errUnknown}, nil
@@ -233,7 +234,7 @@ func (cl *CloudRunJobAdmin) Get(ctx__ context.Context, manifest *types.ManagedEn
 	}
 	job, err := svc.GetJob(ctx__, &getReq)
 	if err != nil {
-		updatedManifestbytes, innerErr := GetMeWithStatusAsBytes(&me, !HEALTHY)
+		updatedManifestbytes, innerErr := GetMeWithStatusAsBytes(&me, lastExecutionStatus)
 		if innerErr != nil {
 			errExists := types.Error{Message: err.Error(), ErrorType: types.NewErrorTypeUnknown()}
 			return wrpc.Err[me_gcp_cloudrun_job_admin.ManagedEnvironmentGcpManifest](errExists), nil
@@ -246,7 +247,8 @@ func (cl *CloudRunJobAdmin) Get(ctx__ context.Context, manifest *types.ManagedEn
 		}
 		return &wrpc.Result[types.ManagedEnvironmentGcpManifest, types.Error]{Ok: manifest, Err: &unknownErr}, err
 	}
-	lastExecutionStatus := "NOT_RUN_YET"
+
+	lastExecutionStatus = "NOT_RUN_YET"
 	if job != nil && job.LatestCreatedExecution != nil {
 		lastExecutionStatus = job.LatestCreatedExecution.CompletionStatus.String()
 	}
