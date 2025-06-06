@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"strconv"
 	"strings"
 
 	r "cloud.google.com/go/run/apiv2"
