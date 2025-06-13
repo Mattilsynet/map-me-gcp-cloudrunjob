@@ -10,6 +10,7 @@ require (
 	github.com/bytecodealliance/wasm-tools-go v0.3.2
 	github.com/nats-io/nats.go v1.41.2
 	go.bytecodealliance.org v0.6.2
+	go.wasmcloud.dev/component v0.0.8
 	go.wasmcloud.dev/provider v0.0.6
 	google.golang.org/api v0.230.0
 	wrpc.io/go v0.1.0

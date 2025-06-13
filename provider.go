@@ -125,8 +125,6 @@ func (cl *CloudRunJobAdmin) Update(ctx__ context.Context, manifest *types.Manage
 	imageToUse := config.Image
 	envVars := CrjEnvsFrom(&me)
 	// teams seed project
-	// TODO: move underneath to pkg
-	// Format: projects/{project}/locations/{location}/jobs/{jobId}
 	jobId := "projects/" + gcpProjectToPutCrj + "/locations/" + config.Location + "/jobs/" + me.Metadata.Name
 	updateReq := runpb.UpdateJobRequest{
 		// INFO: AllowMissing will create the job if it doesn't exist
@@ -139,6 +137,28 @@ func (cl *CloudRunJobAdmin) Update(ctx__ context.Context, manifest *types.Manage
 						{
 							Image: imageToUse,
 							Env:   envVars,
+							VolumeMounts: []*runpb.VolumeMount{
+								{
+									Name:      "gh-app-map-me-tf-exec-pem-volume",
+									MountPath: "/etc/map-me-tf-exec",
+								},
+							},
+						},
+					},
+					Volumes: []*runpb.Volume{
+						{
+							Name: "gh-app-map-me-tf-exec-pem-volume",
+							VolumeType: &runpb.Volume_Secret{
+								Secret: &runpb.SecretVolumeSource{
+									Secret: "gh-app-map-me-tf-exec-pem",
+									Items: []*runpb.VersionToPath{
+										{
+											Path:    "gh-app-map-me-tf-exec.pem",
+											Version: "latest",
+										},
+									},
+								},
+							},
 						},
 					},
 				},
