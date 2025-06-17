@@ -97,6 +97,14 @@ func CrjEnvsFrom(me *managedgcpenvironment.ManagedGcpEnvironment) []*runpb.EnvVa
 			Name:   "slack_channel_email",
 			Values: &runpb.EnvVar_Value{Value: spec.Email},
 		},
+		{
+			Name:   "env",
+			Values: &runpb.EnvVar_Value{Value: spec.Env},
+		},
+		{
+			Name:   "GOOGLE_IMPERSONATE_SERVICE_ACCOUNT",
+			Values: &runpb.EnvVar_Value{Value: "terraform-teams-admin-sa@map-tf-seed.iam.gserviceaccount.com"},
+		},
 	}
 	return envVars
 }
@@ -133,12 +141,14 @@ func (cl *CloudRunJobAdmin) Update(ctx__ context.Context, manifest *types.Manage
 			Name: jobId,
 			Template: &runpb.ExecutionTemplate{
 				Template: &runpb.TaskTemplate{
+					ServiceAccount: "atl-mt-ops-atlantis-sa@atl-mt-ops-b704.iam.gserviceaccount.com",
 					Containers: []*runpb.Container{
 						{
 							Image: imageToUse,
 							Env:   envVars,
 							VolumeMounts: []*runpb.VolumeMount{
 								{
+									// TODO: put this as configuration from wadm
 									Name:      "gh-app-map-me-tf-exec-pem-volume",
 									MountPath: "/etc/map-me-tf-exec",
 								},
@@ -147,6 +157,7 @@ func (cl *CloudRunJobAdmin) Update(ctx__ context.Context, manifest *types.Manage
 					},
 					Volumes: []*runpb.Volume{
 						{
+							// TODO: put this as configuration from wadm
 							Name: "gh-app-map-me-tf-exec-pem-volume",
 							VolumeType: &runpb.Volume_Secret{
 								Secret: &runpb.SecretVolumeSource{

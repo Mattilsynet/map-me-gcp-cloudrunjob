@@ -14,8 +14,8 @@ cloud.google.com/go/longrunning v0.6.7 h1:IGtfDWHhQCgCjwQjV9iiLnUta9LBCo8R9QmAFs
 cloud.google.com/go/longrunning v0.6.7/go.mod h1:EAFV3IZAKmM56TyiE6VAP3VoTzhZzySwI/YI1s/nRsY=
 cloud.google.com/go/run v1.9.3 h1:BrB0Y/BlsyWKdHebDp3CpbV9knwcWqqQI4RWYElf1zQ=
 cloud.google.com/go/run v1.9.3/go.mod h1:Si9yDIkUGr5vsXE2QVSWFmAjJkv/O8s3tJ1eTxw3p1o=
-github.com/Mattilsynet/mapis v0.0.5 h1:c7+bUq+Ix37Emfd93mdV72cH279Bz3uMZD4W11d9RMY=
-github.com/Mattilsynet/mapis v0.0.5/go.mod h1:guNu6Oado6y0SuLrffpv5OtTko5cI5k11Nw9EHTQeZI=
+github.com/Mattilsynet/mapis v0.0.11 h1:O8LsNE2ctinJfc1M+qOBkB98ZMityZ237Q278nF2CJE=
+github.com/Mattilsynet/mapis v0.0.11/go.mod h1:CYaHMUhYxEdgJTHUXzeZvGJFQrGGd6jo7s9c40/MLww=
 github.com/bytecodealliance/wasm-tools-go v0.3.2 h1:LKni9PS8yCG5/A79L8tcTKthgf7WN5RZD83W1m6wEE0=
 github.com/bytecodealliance/wasm-tools-go v0.3.2/go.mod h1:fdysX1+SiPxcIhdpg8TLhoxz23k28/5cQ0/L9J4mgig=
 github.com/cenkalti/backoff/v4 v4.3.0 h1:MyRJ/UdXutAwSAT+s3wNd7MfTIcy71VQueUuFK343L8=
