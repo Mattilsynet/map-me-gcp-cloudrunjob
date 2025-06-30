@@ -9,6 +9,7 @@ import (
 	"github.com/Mattilsynet/map-me-gcp-cloudrunjob/bindings/exports/mattilsynet/me_gcp_cloudrun_job_admin/me_gcp_cloudrun_job_admin"
 	"github.com/Mattilsynet/map-me-gcp-cloudrunjob/bindings/mattilsynet/me_gcp_cloudrun_job_admin/types"
 	"github.com/Mattilsynet/mapis/gen/go/managedgcpenvironment/v1"
+	"github.com/googleapis/gax-go/v2"
 	sdk "go.wasmcloud.dev/provider"
 	"google.golang.org/api/option"
 	wrpc "wrpc.io/go"
@@ -109,6 +110,7 @@ func CrjEnvsFrom(me *managedgcpenvironment.ManagedGcpEnvironment) []*runpb.EnvVa
 	return envVars
 }
 
+// INFO: first updates, creates the job if it's missing, then executes the job
 func (cl *CloudRunJobAdmin) Update(ctx__ context.Context, manifest *types.ManagedEnvironmentGcpManifest) (*wrpc.Result[me_gcp_cloudrun_job_admin.ManagedEnvironmentGcpManifest, types.Error], error) {
 	isLinked, target := cl.isLinkedWith(ctx__)
 	if !isLinked {
@@ -126,6 +128,7 @@ func (cl *CloudRunJobAdmin) Update(ctx__ context.Context, manifest *types.Manage
 	jwtOpt := option.WithCredentialsJSON(secret.CloudrunAdminServiceAccountJwt)
 	svc, err := r.NewJobsClient(ctx__, jwtOpt)
 	if err != nil {
+		// TODO: follow same pattern for error handling with some status given back to component calling us
 		cl.provider.Logger.Error("error creating job", "err", err)
 		return nil, err
 	}
@@ -178,11 +181,20 @@ func (cl *CloudRunJobAdmin) Update(ctx__ context.Context, manifest *types.Manage
 	}
 	_, err = svc.UpdateJob(ctx__, &updateReq)
 	if err != nil {
+		// TODO: create new error type for failed to update
+		unknownErr := types.Error{Message: err.Error(), ErrorType: types.NewErrorTypeUnknown()}
+		return wrpc.Err[types.ManagedEnvironmentGcpManifest](unknownErr), err
+	}
+	runJobRequest := &runpb.RunJobRequest{Name: jobId}
+	_, err = svc.RunJob(ctx__, runJobRequest)
+	if err != nil {
+		// TODO: Create new error type for failied to execute
 		unknownErr := types.Error{Message: err.Error(), ErrorType: types.NewErrorTypeUnknown()}
 		return wrpc.Err[types.ManagedEnvironmentGcpManifest](unknownErr), err
 	}
 	updatedManifestBytes, err := me.MarshalVT()
 	if err != nil {
+		// TODO: new error type for serialization/deserialization
 		errExists := types.Error{Message: err.Error(), ErrorType: types.NewErrorTypeUnknown()}
 		return wrpc.Err[me_gcp_cloudrun_job_admin.ManagedEnvironmentGcpManifest](errExists), nil
 	}
