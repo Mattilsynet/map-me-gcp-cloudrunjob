@@ -9,7 +9,6 @@ import (
 	"github.com/Mattilsynet/map-me-gcp-cloudrunjob/bindings/exports/mattilsynet/me_gcp_cloudrun_job_admin/me_gcp_cloudrun_job_admin"
 	"github.com/Mattilsynet/map-me-gcp-cloudrunjob/bindings/mattilsynet/me_gcp_cloudrun_job_admin/types"
 	"github.com/Mattilsynet/mapis/gen/go/managedgcpenvironment/v1"
-	"github.com/googleapis/gax-go/v2"
 	sdk "go.wasmcloud.dev/provider"
 	"google.golang.org/api/option"
 	wrpc "wrpc.io/go"
