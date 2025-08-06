@@ -35,8 +35,8 @@ jobs:
           mv wit-bindgen-wrpc-x86_64-unknown-linux-musl wit-bindgen-wrpc
           chmod +x wit-bindgen-wrpc
           install -m 755 wit-bindgen-wrpc /usr/local/bin/
-      
-      - name: download dependencies 
+
+      - name: download dependencies
         shell: bash
         run: |
           go mod tidy
@@ -49,6 +49,7 @@ jobs:
         shell: bash
         run: |
           wash build
+          export WASH_ISSUER_KEY="${{ secrets.WASH_ISSUER_KEY }}"
       - name: go crosscompile
         shell: bash
         run: |
