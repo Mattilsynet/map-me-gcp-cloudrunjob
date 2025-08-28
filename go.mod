@@ -45,7 +45,7 @@ require (
 	github.com/samber/slog-common v0.18.1 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/tetratelabs/wazero v1.9.0 // indirect
-	github.com/ulikunitz/xz v0.5.12 // indirect
+	github.com/ulikunitz/xz v0.5.14 // indirect
 	github.com/urfave/cli/v3 v3.3.2 // indirect
 	go.bytecodealliance.org/cm v0.2.2 // indirect
 	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
