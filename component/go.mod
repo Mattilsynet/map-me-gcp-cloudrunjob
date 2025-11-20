@@ -1,6 +1,6 @@
 module github.com/Mattilsynet/map-me-gcp-cloudrunjob/component
 
-go 1.24
+go 1.24.0
 
 toolchain go1.24.2
 
@@ -30,9 +30,9 @@ require (
 	github.com/ulikunitz/xz v0.5.12 // indirect
 	github.com/urfave/cli/v3 v3.3.2 // indirect
 	go.bytecodealliance.org/cm v0.2.2 // indirect
-	golang.org/x/crypto v0.37.0 // indirect
-	golang.org/x/mod v0.24.0 // indirect
-	golang.org/x/sys v0.32.0 // indirect
-	golang.org/x/text v0.24.0 // indirect
+	golang.org/x/crypto v0.45.0 // indirect
+	golang.org/x/mod v0.29.0 // indirect
+	golang.org/x/sys v0.38.0 // indirect
+	golang.org/x/text v0.31.0 // indirect
 	google.golang.org/protobuf v1.36.6 // indirect
 )
